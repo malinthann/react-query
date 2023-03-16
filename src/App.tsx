@@ -1,26 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useQuery } from "@tanstack/react-query";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+function APIStatus() {
+  const statusQuery = useQuery(
+    ["status"], () => { return fetch("https://ui.dev/api/courses/react-query/status").then((res) => res.json()) }
+  )
+  if (statusQuery.status === "loading") return <div>loving...</div>
+  const data = statusQuery.data;
+  return <div>{JSON.stringify(data)}</div>
 }
 
-export default App;
+export default function App() {
+  return <APIStatus />;
+}
